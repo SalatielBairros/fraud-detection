@@ -1,6 +1,6 @@
 # Fraud Detection
 
-This material is based on this [Alura course](https://cursos.alura.com.br/course/modelos-preditivos-dados-deteccao-fraude) using this Kaggle dataset: [Credit Card Fraud](https://www.kaggle.com/datasets/gopalmahadevan/fraud-detection-example).
+This material is based on this [Alura course](https://cursos.alura.com.br/course/modelos-preditivos-dados-deteccao-fraude) using this Kaggle dataset: [Credit Card Fraud](https://www.kaggle.com/datasets/gopalmahadevan/fraud-detection-example) that is a part of [PaySim Dataset](https://www.researchgate.net/publication/313138956_PAYSIM_A_FINANCIAL_MOBILE_MONEY_SIMULATOR_FOR_FRAUD_DETECTION).
 
 The material from course is implemented using Jupyter Notebooks, but here I implement a variation using only python and a different project structure. The goal is to detect credit cards fraud.
 

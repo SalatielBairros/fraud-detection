@@ -24,7 +24,7 @@ def configure_pandas():
     pd.set_option('mode.chained_assignment', None)
 
 def configure_numpy_seed():
-    np.random.seed(42)
+    np.random.seed(EnvironmentVariables.SEED)
 
 def prepare_environment():
     configurate_logging()    

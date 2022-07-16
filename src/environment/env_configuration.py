@@ -3,6 +3,7 @@ import json
 import logging
 from environment.constants import EnvironmentVariables
 import pandas as pd
+import numpy as np
 
 def configure_environment_from_file(file_path = './appsettings.json'):
     if(path.exists(file_path)):
@@ -22,7 +23,11 @@ def configurate_logging():
 def configure_pandas():
     pd.set_option('mode.chained_assignment', None)
 
+def configure_numpy_seed():
+    np.random.seed(42)
+
 def prepare_environment():
     configurate_logging()    
     configure_environment_from_file()    
     configure_pandas()
+    configure_numpy_seed()

@@ -19,6 +19,8 @@ class LocalStorageRepository:
         return None
 
     def __create_directories__(self):
+        if(not path.exists('./data')):
+            mkdir('./data')
         if(not path.exists('./data/original')):
             mkdir('./data/original')
         if(not path.exists('./data/processed')):

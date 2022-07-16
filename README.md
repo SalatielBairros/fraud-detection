@@ -8,6 +8,8 @@ The material from course is implemented using Jupyter Notebooks, but here I impl
 
 ```    
 pip install pandas 
+pip3 install ipywidgets
+pip install pandas-profiling
 pip install numpy 
 pip install fastapi
 pip install requests

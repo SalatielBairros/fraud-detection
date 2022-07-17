@@ -5,6 +5,6 @@ from api.controllers.logistic_regression_controller import router as logistic_ro
 import os
 
 prepare_environment()
-app = FastAPI(root_path=os.environ.get('ROOT_PATH'))
+app = FastAPI()
 app.include_router(index_router)
 app.include_router(logistic_router)

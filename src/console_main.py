@@ -1,17 +1,15 @@
 from environment.env_configuration import prepare_environment
-from ingestion.bank_cards_data_ingestor import BankCardsOperationIngestor
-from data_preparation.data_processing_executor import execute_data_preparation
 from models.logistic_regression import LogisticRegressionModel
+from services.data_service import DataService
+from services.model_evaluation_service import ModelEvaluationService
 import json
 
 prepare_environment()
 
-ingestor = BankCardsOperationIngestor()
-ingestor.ingest()
+data_service = DataService()
+df = data_service.load_train_data()
 
-df = execute_data_preparation()
+lr_evaluation_service = ModelEvaluationService(LogisticRegressionModel())
+evaluation = lr_evaluation_service.evaluate(df)
 
-lrModel = LogisticRegressionModel(train_data=df)
-
-evaluation = lrModel.evaluate()
-print(json.dumps(evaluation.dict(), indent=4))
+print(evaluation.json(indent=4))

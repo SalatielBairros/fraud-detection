@@ -6,4 +6,4 @@ class ModelEvaluationResponse(BaseModel):
     recall: float
     f1_score: float    
     confusion_matrix: list[list[int]]
-    roc_auc_score: float
+    roc_auc_score: float    

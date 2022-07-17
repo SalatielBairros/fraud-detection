@@ -36,3 +36,14 @@ uvicorn main:app --reload
 > The `reload` option is used to reload the code when it changes and should be used only when developing.
 
 For te API, the Documentation can be found at [http://localhost:8000/docs](http://localhost:8000/docs).
+
+## Model evaluations
+
+All the implemented models of this project uses the same evaluation metrics. The metrics are:
+
+* **Accuracy**: The percentage of correct predictions.
+* **Precision**: The percentage of correct positive predictions.
+* **Recall**: Proportion of positive predictions that are correct over the total number of positive samples.
+* **F1**: The harmonic mean of precision and recall.
+* **AUC**: Area under the ROC curve. The ROC curve is the receiver operating characteristic curve. It is a plot of the sensitivity and specificity of the classifier.
+* **Confusion Matrix**: A table that shows the number of correct and incorrect predictions for each class.

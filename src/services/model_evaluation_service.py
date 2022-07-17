@@ -29,10 +29,17 @@ class ModelEvaluationService:
         y_pred_proba = model.predict_proba(x_test)[::, 1]
         auc = metrics.roc_auc_score(y_test, y_pred_proba)
 
+        report = metrics.classification_report(y_test, y_pred, output_dict=True,target_names=['NotFraud', 'Fraud'])
+        report = {
+            'Fraud': report['Fraud'],
+            'NotFraud': report['NotFraud']
+        }
+
         return ModelEvaluationResponse(
             accuracy=accuracy, 
             precision=precision, 
             recall=recall, 
             f1_score=f1,
             confusion_matrix=cm,
-            roc_auc_score=auc)
+            roc_auc_score=auc,
+            report_by_label=report)

@@ -7,7 +7,7 @@ import numpy as np
 
 def configure_environment_from_file(file_path = './appsettings.json'):
     if(path.exists(file_path)):
-        logging.info('Configurating environment from file...\n')
+        logging.info('Configurating environment from file...')
         with open(file_path) as file:
             configurations = json.load(file)
             env[EnvironmentVariables.data_repository_type] = configurations[EnvironmentVariables.data_repository_type]            

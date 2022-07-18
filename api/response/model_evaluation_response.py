@@ -8,3 +8,4 @@ class ModelEvaluationResponse(BaseModel):
     confusion_matrix: list[list[int]]
     roc_auc_score: float
     report_by_label: dict
+    feature_importances: list

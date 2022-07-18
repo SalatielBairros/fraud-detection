@@ -7,16 +7,20 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix
 from repository.local_storage_repository import LocalStorageRepository
+from eli5.sklearn import PermutationImportance
+import numpy as np
 
 class ModelEvaluationService:
     def __init__(self, model: BaseLearningModel) -> None:
         self.model = model
         self.repository = LocalStorageRepository()
+        self.columns = []
 
     def evaluate(self, train_data: pd.DataFrame) -> ModelEvaluationResponse:        
         logging.info("Evaluating model...")
         X = train_data.drop(columns=self.model.target_column)
         y = train_data[self.model.target_column]
+        self.columns = X.columns
         x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=EnvironmentVariables.SEED, stratify=y)
         
         model = self.model.get_model()
@@ -33,30 +37,31 @@ class ModelEvaluationService:
 
         x_balanced = balanced_dataset.drop(columns=['isFraud']).values
         y_balanced = balanced_dataset['isFraud'].values
+        self.columns = balanced_dataset.drop(columns=['isFraud']).columns
         x_train, x_test, y_train, y_test = train_test_split(x_balanced, y_balanced, test_size=0.15, random_state = EnvironmentVariables.SEED, stratify=y_balanced)
         
-        model = self.model.get_model()
-        model.fit(x_train, y_train)
-        y_test_pred = model.predict(x_test)
-        y_test_pred_proba = model.predict_proba(x_test)[::, 1]
+        test_model = self.model.get_model()
+        test_model.fit(x_train, y_train)
+        y_test_pred = test_model.predict(x_test)
+        y_test_pred_proba = test_model.predict_proba(x_test)[::, 1]
 
         validation_dataset = self.repository.load_validation_dataset()
-        model = self.model.get_model()
-        model.fit(x_balanced, y_balanced)
+        validation_model = self.model.get_model()
+        validation_model.fit(x_balanced, y_balanced)
         x_validation = validation_dataset.drop(columns=['isFraud']).values
         y_validation = validation_dataset['isFraud'].values
-        y_validation_pred = model.predict(x_validation)
-        y_validation_pred_proba = model.predict_proba(x_validation)[::, 1]
+        y_validation_pred = validation_model.predict(x_validation)
+        y_validation_pred_proba = validation_model.predict_proba(x_validation)[::, 1]
 
-        test_metrics = self.__get_metrics__(y_test, y_test_pred, y_test_pred_proba)
-        validation_metrics = self.__get_metrics__(y_validation, y_validation_pred, y_validation_pred_proba)
+        test_metrics = self.__get_metrics__(y_test, y_test_pred, y_test_pred_proba, x_test, test_model)
+        validation_metrics = self.__get_metrics__(y_validation, y_validation_pred, y_validation_pred_proba, x_validation, validation_model)
 
         return {
             'test_metrics': test_metrics.dict(),
             'validation_metrics': validation_metrics.dict()
         }
 
-    def __get_metrics__(self, y_real, y_pred, y_pred_proba) -> ModelEvaluationResponse:
+    def __get_metrics__(self, y_real, y_pred, y_pred_proba, x_test, model) -> ModelEvaluationResponse:
         accuracy = metrics.accuracy_score(y_real, y_pred)
         precision = metrics.precision_score(y_real, y_pred)
         recall = metrics.recall_score(y_real, y_pred)
@@ -70,6 +75,9 @@ class ModelEvaluationService:
             'NotFraud': report['NotFraud']
         }
 
+        perm = PermutationImportance(model, random_state=EnvironmentVariables.SEED).fit(x_test, y_real)
+        importances = list(zip(self.columns, np.round(perm.feature_importances_, 2)))
+        
         return ModelEvaluationResponse(
             accuracy=accuracy, 
             precision=precision, 
@@ -77,4 +85,5 @@ class ModelEvaluationService:
             f1_score=f1,
             confusion_matrix=cm,
             roc_auc_score=auc,
-            report_by_label=report)
+            report_by_label=report,
+            feature_importances=importances)

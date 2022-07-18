@@ -14,7 +14,7 @@ def evaluate_model():
 
     lr_evaluation_service = ModelEvaluationService(KnnModel())
     evaluation = lr_evaluation_service.evaluate(df)
-    return evaluation.json()
+    return evaluation
 
 @router.get("/balanced/evaluation")
 def evaluate_balanced_model():
@@ -24,4 +24,4 @@ def evaluate_balanced_model():
 
     lr_evaluation_service = ModelEvaluationService(KnnModel())
     evaluation = lr_evaluation_service.evaluate_augmentaded_data(balanced_dataset)
-    return json.dumps(evaluation)
+    return evaluation

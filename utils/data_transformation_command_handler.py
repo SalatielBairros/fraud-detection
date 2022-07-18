@@ -11,8 +11,9 @@ class DataTransformationCommandHandler:
         self.commands.append(command)
         return self
 
-    def execute_and_save(self) -> pd.DataFrame:
-        dataset = self.__load_data__()
+    def execute_and_save(self, dataset: pd.DataFrame = None) -> pd.DataFrame:
+        if(dataset is None):
+            dataset = self.__load_data__()        
         for command in self.commands:
             command_instance = command(dataset)
             command_instance_should_execute = getattr(command_instance, "should_execute", None)

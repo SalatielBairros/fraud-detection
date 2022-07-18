@@ -17,6 +17,7 @@ pip install sklearn
 pip install joblib
 pip install pydantic
 pip install "uvicorn[standard]"
+pip install -U imbalanced-learn
 ```
 
 ## Running de Code

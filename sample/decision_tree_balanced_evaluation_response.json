@@ -45,7 +45,7 @@
                 22
             ]
         ],
-        "roc_auc_score": 0.9378297944623748,
+        "roc_auc_score": 0.9378406658739596,
         "report_by_label": {
             "Fraud": {
                 "precision": 0.1004566210045662,

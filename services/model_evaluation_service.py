@@ -41,6 +41,8 @@ class ModelEvaluationService:
         y_test_pred_proba = model.predict_proba(x_test)[::, 1]
 
         validation_dataset = self.repository.load_validation_dataset()
+        model = self.model.get_model()
+        model.fit(x_balanced, y_balanced)
         x_validation = validation_dataset.drop(columns=['isFraud']).values
         y_validation = validation_dataset['isFraud'].values
         y_validation_pred = model.predict(x_validation)
